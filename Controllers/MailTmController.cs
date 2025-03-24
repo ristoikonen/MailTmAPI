@@ -89,9 +89,6 @@ namespace MailTmAPI.Controllers
             }
 
             return new AccountInfo();
-
         }
-
-
     }
 }
