@@ -1,28 +1,23 @@
-@MailTmAPI_HostAddress = https://localhost:60957
-
-GET {{MailTmAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-
-###
-
+@MailTmAPI_HostAddress = https://localhost:55288
 
 GET {{MailTmAPI_HostAddress}}/mailtm/
 Accept: application/json
-
 
 ###
 
 POST {{MailTmAPI_HostAddress}}/mailtm/
 Accept: application/json
 
-
-
 ###
 
 GET {{MailTmAPI_HostAddress}}/domains/
 Accept: application/json
 
+###
+
+GET {{MailTmAPI_HostAddress}}/accounts/
+Accept: application/json
+Content-Type: application/json
 
 ###
 
@@ -30,5 +25,22 @@ POST {{MailTmAPI_HostAddress}}/accounts/
 Accept: application/json
 Content-Type: application/json
 
+###
+
+GET {{MailTmAPI_HostAddress}}/messages/
+Accept: application/json
+Content-Type: application/json
+
+
+
+### JUSt FOR MODEL: Update a Post
+PUT https://api.example.com/posts/1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Updated Post Title",
+  "content": "This is the updated content of my post."
+}
 
 ###

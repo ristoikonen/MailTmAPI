@@ -54,7 +54,7 @@ namespace MailTmAPI.Http
     internal class HttpGenericClient<T>
     {
         //TODO: add uri as param
-        public async Task<JsonDocument?> GetAsync( Dictionary<string, string>? contentsParams = null, string token = "")
+        public async Task<JsonDocument?> GetAsync(string requestUri, Dictionary<string, string>? contentsParams = null, string token = "")
         {
             try
             {
@@ -67,8 +67,7 @@ namespace MailTmAPI.Http
                     client.DefaultRequestHeaders.Add("Host", Endpoints.Host);
                     client.DefaultRequestHeaders.Add("Connection", "keep-alive");
                     if (token.Length > 0)
-                        client.DefaultRequestHeaders.Add("Authorization", $"token {token}");
-
+                        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
                     if (contentsParams is not null)
                     {
                         var content = new FormUrlEncodedContent(contentsParams);
@@ -76,7 +75,7 @@ namespace MailTmAPI.Http
                         var contents = new StringContent(paramAsJSON, Encoding.UTF8, "application/json");
                     }
 
-                    HttpResponseMessage response = await client.GetAsync(Endpoints.ApiRoot + Endpoints.Domains);
+                    HttpResponseMessage response = await client.GetAsync(requestUri);
                     if (response.IsSuccessStatusCode && response.Content is object)
                     {
 

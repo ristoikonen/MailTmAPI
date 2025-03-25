@@ -11,13 +11,12 @@ using System.Text;
 
 namespace MailTmAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AccountsController : ControllerBase
     {
 
         private readonly ILogger<AccountsController> _logger;
-        //private readonly ILogger<MailTmController> _logger;
 
         public AccountsController(ILogger<AccountsController> logger)
         {
@@ -35,12 +34,11 @@ namespace MailTmAPI.Controllers
 
             //var firstdomain = domaininfolist?.Count > 0 ? domaininfolist[0].Domain : "NoDomain";
             //emailaddress += @"@" + domaininfolist?[0].Domain;
-            emailaddress = "idri@indigobook.com";
+
+            emailaddress = "id@indigobook.com";
             Dictionary<string, string> emailparams = new Dictionary<string, string> { { "address", emailaddress }, { "password", "HeHe" } };
 
             HttpGenericClient<AccountInfo> client = new HttpGenericClient<AccountInfo>();
-            //AccountInfo[] domainnames = Array.Empty<AccountInfo>();
-
             try
             {
                 var accountinfo = await client.PostAsync(Endpoints.ApiRoot + Endpoints.Accounts, emailparams);

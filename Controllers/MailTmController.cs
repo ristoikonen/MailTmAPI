@@ -26,7 +26,7 @@ namespace MailTmAPI.Controllers
         {
 
             HttpGenericClient<DomainInfo> client = new HttpGenericClient<DomainInfo>();
-            var jsondoc = await client.GetAsync();
+            var jsondoc = await client.GetAsync(Endpoints.ApiRoot + Endpoints.Domains);
             if (jsondoc is not null)
             {
                 var root = jsondoc.RootElement;

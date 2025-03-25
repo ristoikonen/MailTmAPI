@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Nodes;
 using System.Text.Json;
+using MailTmAPI.Properties;
 
 namespace MailTmAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class DomainsController : ControllerBase
     {
@@ -18,12 +19,13 @@ namespace MailTmAPI.Controllers
             _logger = logger;
         }
 
+
         [HttpGet(Name = "Domains")]
         public async Task<IEnumerable<DomainInfo>> GetDomainsAsync()
         {
 
             HttpGenericClient<DomainInfo> client = new HttpGenericClient<DomainInfo>();
-            var jsondoc = await client.GetAsync();
+            var jsondoc = await client.GetAsync(Endpoints.ApiRoot + Endpoints.Domains);
             if (jsondoc is not null)
             {
                 var root = jsondoc.RootElement;
