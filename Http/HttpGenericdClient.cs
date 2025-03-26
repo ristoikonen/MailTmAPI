@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using MailTmAPI.Models;
 using Microsoft.AspNetCore.Connections;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
 
 namespace MailTmAPI.Http
 {
@@ -53,18 +54,17 @@ namespace MailTmAPI.Http
 
     internal class HttpGenericClient<T>
     {
-        //TODO: add uri as param
         public async Task<JsonDocument?> GetAsync(string requestUri, Dictionary<string, string>? contentsParams = null, string token = "")
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri(Endpoints.ApiRoot + Endpoints.Domains);
+                    //client.BaseAddress = new Uri(requestUri);
 
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
-                    client.DefaultRequestHeaders.Add("Host", Endpoints.Host);
+                    client.DefaultRequestHeaders.Add("Host", Endpoints.CoinLoreHost);
                     client.DefaultRequestHeaders.Add("Connection", "keep-alive");
                     if (token.Length > 0)
                         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
@@ -78,16 +78,28 @@ namespace MailTmAPI.Http
                     HttpResponseMessage response = await client.GetAsync(requestUri);
                     if (response.IsSuccessStatusCode && response.Content is object)
                     {
+                        try
+                        {
+                            //Root data = JsonSerializer.Deserialize<Root>(response.Conten);
+                            //var res= System.Text.Json.JsonSerializer.Deserialize<CoinData[]>(response.Content.ReadAsStream());
+                            var contentStream = await response.Content.ReadAsStreamAsync();
+                            var result = await System.Text.Json.JsonSerializer.DeserializeAsync<CoinData[]>(contentStream);
+                            //var info = await response.Content.ReadFromJsonAsync<CoinData[]>();
+                            Console.WriteLine(result?.ToString());
+                        }
+                        catch (Exception ex2)
+                        {
+                            Console.WriteLine(ex2.Message);
+                        }
 
-                        //ar domaininfo = await response.Content.ReadFromJsonAsync<T[]?>();
                         //var domaininfo = response.Content.ReadFromJsonAsAsyncEnumerable<T?>();
                         //var stream = response.Content.ReadFromJsonAsAsyncEnumerable<T>();
                         //await foreach (var titem in stream)
                         //{
-                       //     Console.WriteLine( titem?.ToString());
+                        //     Console.WriteLine( titem?.ToString());
                         //}   
 
-                        
+
                         return JsonDocument.Parse(await response.Content.ReadAsStringAsync());
                     }
                     else

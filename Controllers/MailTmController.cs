@@ -22,36 +22,70 @@ namespace MailTmAPI.Controllers
         }
 
         [HttpGet(Name = "TestDomains")]
-        public async Task<IEnumerable<DomainInfo>> GetDomainsAsync()
+        public async Task<JsonDocument?> GetDomainsAsync()
         {
 
-            HttpGenericClient<DomainInfo> client = new HttpGenericClient<DomainInfo>();
-            var jsondoc = await client.GetAsync(Endpoints.ApiRoot + Endpoints.Domains);
-            if (jsondoc is not null)
+            HttpGenericClient<JsonDocument> client = new HttpGenericClient<JsonDocument>();
+            try
             {
-                var root = jsondoc.RootElement;
-                JsonNode document = JsonNode.Parse(root.ToString() ?? "")!;
-                var domains = document?["hydra:member"]?.DeepClone();
-
-                if (domains is not null && domains is JsonArray)
-                {
-                    var domainslist = JsonSerializer.Deserialize<List<DomainInfo>>(domains);
-                    return domainslist ?? Enumerable.Empty<DomainInfo>();
-                }
+                var accountinfo = await client.GetAsync(@"https://api.coinlore.net/api/ticker/?id=90");
+                return accountinfo; // ?? new JsonDocument("");
             }
-            
-            return Enumerable.Empty<DomainInfo>();
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error: {e.Message}");
+            }
 
-            //return Enumerable.Range(1, 5).Select(index => new DomainInfo
+            //var jsondoc = await client.GetAsync(@"https://api.coinlore.net/api/ticker/?id=90");
+            //if (jsondoc is not null)
             //{
-            //    CreatedAt = DateTime.Now,
-            //    Id = index.ToString(),
-            //    IsActive = true,
-            //    Domain = "dnm"
+            //    var root = jsondoc.RootElement;
+            //    JsonNode document = JsonNode.Parse(root.ToString() ?? "")!;
+            //    var domains = document?["hydra:member"]?.DeepClone();
 
-            //})
-            //.ToArray();
+            //    if (domains is not null && domains is JsonArray)
+            //    {
+            //        var domainslist = JsonSerializer.Deserialize<List<CoinData>>(domains);
+            //        return domainslist ?? Enumerable.Empty<DomainInfo>();
+            //    }
+            //}
+
+            return null;
         }
+
+
+
+        //[HttpGet(Name = "TestDomains")]
+        //public async Task<IEnumerable<DomainInfo>> GetDomainsAsync()
+        //{
+
+        //    HttpGenericClient<DomainInfo> client = new HttpGenericClient<DomainInfo>();
+        //    var jsondoc = await client.GetAsync(Endpoints.ApiRoot + Endpoints.Domains);
+        //    if (jsondoc is not null)
+        //    {
+        //        var root = jsondoc.RootElement;
+        //        JsonNode document = JsonNode.Parse(root.ToString() ?? "")!;
+        //        var domains = document?["hydra:member"]?.DeepClone();
+
+        //        if (domains is not null && domains is JsonArray)
+        //        {
+        //            var domainslist = JsonSerializer.Deserialize<List<DomainInfo>>(domains);
+        //            return domainslist ?? Enumerable.Empty<DomainInfo>();
+        //        }
+        //    }
+            
+        //    return Enumerable.Empty<DomainInfo>();
+
+        //    //return Enumerable.Range(1, 5).Select(index => new DomainInfo
+        //    //{
+        //    //    CreatedAt = DateTime.Now,
+        //    //    Id = index.ToString(),
+        //    //    IsActive = true,
+        //    //    Domain = "dnm"
+
+        //    //})
+        //    //.ToArray();
+        //}
 
         [HttpPost(Name = "PostAccount")]
         public async Task<AccountInfo> PostAccountAsync()

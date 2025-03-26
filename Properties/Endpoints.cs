@@ -4,6 +4,7 @@
     {
         public static readonly Uri ApiRoot = new Uri("https://api.mail.tm");
         public const string Host = "api.mail.tm";
+        public const string CoinLoreHost = "api.coinlore.net";
 
         public const string Accounts = "accounts";
         public const string Account = "accounts/{0}";

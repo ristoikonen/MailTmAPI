@@ -1,4 +1,4 @@
-@MailTmAPI_HostAddress = https://localhost:55288
+@MailTmAPI_HostAddress = https://localhost:58799
 
 GET {{MailTmAPI_HostAddress}}/mailtm/
 Accept: application/json
