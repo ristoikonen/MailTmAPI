@@ -35,7 +35,7 @@ namespace MailTmAPI.Controllers
             //var firstdomain = domaininfolist?.Count > 0 ? domaininfolist[0].Domain : "NoDomain";
             //emailaddress += @"@" + domaininfolist?[0].Domain;
 
-            emailaddress = "id@indigobook.com";
+            emailaddress = "id@chefalicious.com";
             Dictionary<string, string> emailparams = new Dictionary<string, string> { { "address", emailaddress }, { "password", "HeHe" } };
 
             HttpGenericClient<AccountInfo> client = new HttpGenericClient<AccountInfo>();

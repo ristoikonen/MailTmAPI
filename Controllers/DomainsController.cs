@@ -26,14 +26,11 @@ namespace MailTmAPI.Controllers
             var jsondoc = await client.GetAsync(Endpoints.ApiRoot + Endpoints.Domains);
             if (jsondoc is not null)
             {
-                //var root = jsondoc.RootElement;
-                //JsonNode document = JsonNode.Parse(root.ToString() ?? "")!;
+                var root = jsondoc.RootElement;
+                JsonNode document = JsonNode.Parse(root.ToString() ?? "")!;
+                //Console.WriteLine(document);
 
-                JsonNode node = JsonNode.Parse(jsondoc.ToString() ?? "")!;
-               
-               
-
-                var domains = node?["hydra:member"]?.DeepClone();
+                var domains = document?["hydra:member"]?.DeepClone();
 
                 if (domains is not null && domains is JsonArray)
                 {

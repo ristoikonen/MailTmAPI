@@ -39,15 +39,14 @@ namespace MailTmAPI.Http
                     {
                         try
                         {
-                            var contentStream = await response.Content.ReadAsStreamAsync();
+                            return JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+                            //var contentStream = await response.Content.ReadAsStreamAsync();
                         }
                         catch (Exception ex2)
                         {
                             Console.WriteLine(ex2.Message);
                             return null;
                         }
-
-                        return JsonDocument.Parse(await response.Content.ReadAsStringAsync());
                     }
                     else
                     {
