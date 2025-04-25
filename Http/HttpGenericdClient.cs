@@ -6,51 +6,10 @@ using Microsoft.AspNetCore.Components;
 using MailTmAPI.Models;
 using Microsoft.AspNetCore.Connections;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Options;
+
 
 namespace MailTmAPI.Http
 {
-
-    //internal class HttpCustomClient
-    //{
-
-    //    public async Task<AccountInfo?> PostAsync(string uri, Dictionary<string, string> paramdict)
-    //    {
-    //        try
-    //        {
-    //            var content = new FormUrlEncodedContent(paramdict);
-
-    //            string paramAsJSON = JsonConvert.SerializeObject(paramdict);
-    //            Console.WriteLine(paramAsJSON);
-
-    //            using (var client = new System.Net.Http.HttpClient())
-    //            {
-
-    //                client.DefaultRequestHeaders.Accept.Clear();
-    //                client.DefaultRequestHeaders.Add("Accept", "*/*");
-    //                client.DefaultRequestHeaders.Add("Host", Endpoints.Host);
-    //                client.DefaultRequestHeaders.Add("Connection", "keep-alive");
-
-    //                var contents = new StringContent(paramAsJSON, Encoding.UTF8, "application/json");
-
-    //                HttpResponseMessage response = await client.PostAsync(uri, contents);
-    //                if (response.Content is object)
-    //                {
-    //                    //var accountinfos = response.Content.ReadAsAsync<AccountInfo>();
-    //                    var accountinfo = response.Content.ReadFromJsonAsync<AccountInfo?>();
-    //                    return accountinfo.Result;
-    //                }
-    //                return null;
-    //            }
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            Console.WriteLine(ex.Message);
-    //            return null; ;
-    //        }
-    //    }
-    //}
-
 
     internal class HttpGenericClient<T>
     {
@@ -64,7 +23,7 @@ namespace MailTmAPI.Http
 
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
-                    client.DefaultRequestHeaders.Add("Host", Endpoints.CoinLoreHost);
+                    client.DefaultRequestHeaders.Add("Host", Endpoints.Host);
                     client.DefaultRequestHeaders.Add("Connection", "keep-alive");
                     if (token.Length > 0)
                         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
@@ -80,25 +39,13 @@ namespace MailTmAPI.Http
                     {
                         try
                         {
-                            //Root data = JsonSerializer.Deserialize<Root>(response.Conten);
-                            //var res= System.Text.Json.JsonSerializer.Deserialize<CoinData[]>(response.Content.ReadAsStream());
                             var contentStream = await response.Content.ReadAsStreamAsync();
-                            var result = await System.Text.Json.JsonSerializer.DeserializeAsync<CoinData[]>(contentStream);
-                            //var info = await response.Content.ReadFromJsonAsync<CoinData[]>();
-                            Console.WriteLine(result?.ToString());
                         }
                         catch (Exception ex2)
                         {
                             Console.WriteLine(ex2.Message);
+                            return null;
                         }
-
-                        //var domaininfo = response.Content.ReadFromJsonAsAsyncEnumerable<T?>();
-                        //var stream = response.Content.ReadFromJsonAsAsyncEnumerable<T>();
-                        //await foreach (var titem in stream)
-                        //{
-                        //     Console.WriteLine( titem?.ToString());
-                        //}   
-
 
                         return JsonDocument.Parse(await response.Content.ReadAsStringAsync());
                     }
@@ -207,6 +154,13 @@ namespace MailTmAPI.Http
             //        var jd = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
             //        var jd2 = await response.Content.ReadFromJsonAsync<T?>();
             //    }
+
+            //Root data = JsonSerializer.Deserialize<Root>(response.Conten);
+            //var res= System.Text.Json.JsonSerializer.Deserialize<CoinData[]>(response.Content.ReadAsStream());
+            //if(contentStream is not null)
+            //    return await System.Text.Json.JsonSerializer.DeserializeAsync<T>(contentStream);
+            //else
+            //    return default(T);
 
             //    if (response.Content is object)
             //    {

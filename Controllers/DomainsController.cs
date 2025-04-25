@@ -19,18 +19,21 @@ namespace MailTmAPI.Controllers
             _logger = logger;
         }
 
-
         [HttpGet(Name = "Domains")]
         public async Task<IEnumerable<DomainInfo>> GetDomainsAsync()
         {
-
             HttpGenericClient<DomainInfo> client = new HttpGenericClient<DomainInfo>();
             var jsondoc = await client.GetAsync(Endpoints.ApiRoot + Endpoints.Domains);
             if (jsondoc is not null)
             {
-                var root = jsondoc.RootElement;
-                JsonNode document = JsonNode.Parse(root.ToString() ?? "")!;
-                var domains = document?["hydra:member"]?.DeepClone();
+                //var root = jsondoc.RootElement;
+                //JsonNode document = JsonNode.Parse(root.ToString() ?? "")!;
+
+                JsonNode node = JsonNode.Parse(jsondoc.ToString() ?? "")!;
+               
+               
+
+                var domains = node?["hydra:member"]?.DeepClone();
 
                 if (domains is not null && domains is JsonArray)
                 {
@@ -40,16 +43,6 @@ namespace MailTmAPI.Controllers
             }
 
             return Enumerable.Empty<DomainInfo>();
-
-            //return Enumerable.Range(1, 5).Select(index => new DomainInfo
-            //{
-            //    CreatedAt = DateTime.Now,
-            //    Id = index.ToString(),
-            //    IsActive = true,
-            //    Domain = "dnm"
-
-            //})
-            //.ToArray();
         }
     }
 }

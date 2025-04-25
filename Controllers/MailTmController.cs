@@ -28,7 +28,7 @@ namespace MailTmAPI.Controllers
             HttpGenericClient<JsonDocument> client = new HttpGenericClient<JsonDocument>();
             try
             {
-                var accountinfo = await client.GetAsync(@"https://api.coinlore.net/api/ticker/?id=90");
+                var accountinfo = await client.GetAsync(Endpoints.ApiRoot + Endpoints.Domains);
                 return accountinfo; // ?? new JsonDocument("");
             }
             catch (Exception e)
@@ -36,19 +36,20 @@ namespace MailTmAPI.Controllers
                 Console.WriteLine($"Error: {e.Message}");
             }
 
-            //var jsondoc = await client.GetAsync(@"https://api.coinlore.net/api/ticker/?id=90");
-            //if (jsondoc is not null)
-            //{
-            //    var root = jsondoc.RootElement;
-            //    JsonNode document = JsonNode.Parse(root.ToString() ?? "")!;
-            //    var domains = document?["hydra:member"]?.DeepClone();
+            var jsondoc = await client.GetAsync(Endpoints.ApiRoot + Endpoints.Domains);
+            if (jsondoc is not null)
+            {
+                var root = jsondoc.RootElement;
+                JsonNode document = JsonNode.Parse(root.ToString() ?? "")!;
+                var domains = document?["hydra:member"]?.DeepClone();
 
-            //    if (domains is not null && domains is JsonArray)
-            //    {
-            //        var domainslist = JsonSerializer.Deserialize<List<CoinData>>(domains);
-            //        return domainslist ?? Enumerable.Empty<DomainInfo>();
-            //    }
-            //}
+                return jsondoc;
+                //if (domains is not null && domains is JsonArray)
+                //{
+                //    var domainslist = JsonSerializer.Deserialize<List<DomainsInfo>>(domains);
+                //    return domainslist ?? Enumerable.Empty<DomainInfo>();
+                //}
+            }
 
             return null;
         }

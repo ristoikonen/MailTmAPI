@@ -51,15 +51,6 @@ namespace MailTmAPI.Controllers
 
             return new AccountInfo();
 
-            //return Enumerable.Range(1, 5).Select(index => new DomainInfo
-            //{
-            //    CreatedAt = DateTime.Now,
-            //    Id = index.ToString(),
-            //    IsActive = true,
-            //    Domain = "dnm"
-
-            //})
-            //.ToArray();
         }
 
     }
