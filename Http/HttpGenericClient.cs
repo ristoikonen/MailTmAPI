@@ -1,16 +1,11 @@
 ﻿using MailTmAPI.Properties;
+using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
-using Microsoft.AspNetCore.Components;
-using MailTmAPI.Models;
-using Microsoft.AspNetCore.Connections;
-using Newtonsoft.Json;
-
 
 namespace MailTmAPI.Http
 {
-
     internal class HttpGenericClient<T>
     {
         public async Task<JsonDocument?> GetAsync(string requestUri, Dictionary<string, string>? contentsParams = null, string token = "")
@@ -19,8 +14,6 @@ namespace MailTmAPI.Http
             {
                 using (var client = new HttpClient())
                 {
-                    //client.BaseAddress = new Uri(requestUri);
-
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
                     client.DefaultRequestHeaders.Add("Host", Endpoints.Host);
@@ -61,12 +54,12 @@ namespace MailTmAPI.Http
             }
         }
 
-        public async Task<T?> PostAsync(string uri, Dictionary<string, string> paramdict)
+        public async Task<T?> PostAsync(string uri, Dictionary<string, string> contentParams)
         {
             try
             {
-                var content = new FormUrlEncodedContent(paramdict);
-                string paramAsJSON = JsonConvert.SerializeObject(paramdict);
+                var content = new FormUrlEncodedContent(contentParams);
+                string paramAsJSON = JsonConvert.SerializeObject(content);
 
                 using (var client = new System.Net.Http.HttpClient())
                 {
@@ -94,7 +87,7 @@ namespace MailTmAPI.Http
         }
 
 
-        public async Task<T?> PostAsyncOld(string uri, Dictionary<string, string> contentsParams, string token = "")
+        public async Task<T?> PostAsync(string uri, Dictionary<string, string> contentsParams, string token = "")
         {
             try
             {
@@ -128,51 +121,53 @@ namespace MailTmAPI.Http
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-
+                return default(T);
             }
             return default(T);
-
-            //try
-            //{
-            //    var content = new FormUrlEncodedContent(paramdict);
-            //    string paramAsJSON = JsonSerializer.Serialize(paramdict);
-
-            //    var client = new HttpClient();
-
-            //    client.DefaultRequestHeaders.Add("Accept", "*/*");
-            //    client.DefaultRequestHeaders.Add("Host", Endpoints.Host);
-            //    client.DefaultRequestHeaders.Add("Connection", "keep-alive");
-            //    if (token.Length > 0)
-            //        client.DefaultRequestHeaders.Add("Authorization", $"token {token}");
-            //    var contents = new StringContent(paramAsJSON, Encoding.UTF8, "application/json");
-
-            //    HttpResponseMessage response = await client.PostAsync("https://api.mail.tm/token", contents);
-
-            //    if (response.IsSuccessStatusCode && response.Content is object)
-            //    {
-            //        var jd = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
-            //        var jd2 = await response.Content.ReadFromJsonAsync<T?>();
-            //    }
-
-            //Root data = JsonSerializer.Deserialize<Root>(response.Conten);
-            //var res= System.Text.Json.JsonSerializer.Deserialize<CoinData[]>(response.Content.ReadAsStream());
-            //if(contentStream is not null)
-            //    return await System.Text.Json.JsonSerializer.DeserializeAsync<T>(contentStream);
-            //else
-            //    return default(T);
-
-            //    if (response.Content is object)
-            //    {
-            //        var accountinfo = response.Content.ReadFromJsonAsync<T?>();
-            //        return accountinfo.Result;
-            //    }
-            //    return default(T);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //    return default(T);
-            //}
         }
+
+
+        //try
+        //{
+        //    var content = new FormUrlEncodedContent(paramdict);
+        //    string paramAsJSON = JsonSerializer.Serialize(paramdict);
+
+        //    var client = new HttpClient();
+
+        //    client.DefaultRequestHeaders.Add("Accept", "*/*");
+        //    client.DefaultRequestHeaders.Add("Host", Endpoints.Host);
+        //    client.DefaultRequestHeaders.Add("Connection", "keep-alive");
+        //    if (token.Length > 0)
+        //        client.DefaultRequestHeaders.Add("Authorization", $"token {token}");
+        //    var contents = new StringContent(paramAsJSON, Encoding.UTF8, "application/json");
+
+        //    HttpResponseMessage response = await client.PostAsync("https://api.mail.tm/token", contents);
+
+        //    if (response.IsSuccessStatusCode && response.Content is object)
+        //    {
+        //        var jd = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        //        var jd2 = await response.Content.ReadFromJsonAsync<T?>();
+        //    }
+
+        //Root data = JsonSerializer.Deserialize<Root>(response.Conten);
+        //var res= System.Text.Json.JsonSerializer.Deserialize<CoinData[]>(response.Content.ReadAsStream());
+        //if(contentStream is not null)
+        //    return await System.Text.Json.JsonSerializer.DeserializeAsync<T>(contentStream);
+        //else
+        //    return default(T);
+
+        //    if (response.Content is object)
+        //    {
+        //        var accountinfo = response.Content.ReadFromJsonAsync<T?>();
+        //        return accountinfo.Result;
+        //    }
+        //    return default(T);
+        //}
+        //catch (Exception ex)
+        //{
+        //    Console.WriteLine(ex.Message);
+        //    return default(T);
+        //}
+
     }
 }
